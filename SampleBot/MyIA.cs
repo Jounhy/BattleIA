@@ -133,16 +133,27 @@ namespace SampleBot
             solution = as_Path.FindPath(new Vector2(meX,meY), new Vector2(target.Position.X,target.Position.Y ));
             // Reverse path (from start to end...)
             Stack<GridPoint> rsolution = new Stack<GridPoint>();
-            
-            foreach (GridPoint p in solution){
-                Console.WriteLine($"[ROUTE] {p.Position.X},{p.Position.Y}");
-            }
-            Console.WriteLine($"[ROUTE] {meX},{meY}");
-         
- 
-            route = build_route(solution);
+           
+            try
+            {
 
-             return route;
+                foreach (GridPoint p in solution)
+                {
+                    Console.WriteLine($"[ROUTE] {p.Position.X},{p.Position.Y}");
+                }
+                Console.WriteLine($"[ROUTE] {meX},{meY}");
+
+
+                route = build_route(solution);
+
+                return route;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine($"[ROUTE] is empty ");
+                return new List<MoveDirection>();
+
+            }
         }
 
         List<MoveDirection> build_route(Stack<GridPoint> points)
@@ -247,67 +258,36 @@ namespace SampleBot
                 List<GridPoint> lineCells = new List<GridPoint>();
                 for (int j = 0; j < distance; j++)
                 {
-                    GridPoint p = new GridPoint(new Vector2(i, j));
+                    GridPoint p = new GridPoint(new Vector2(i,j));
                     // IF point is energy :
                     if (informations[index] == (byte)CaseState.Energy)
                     {
                         radar_nrj++;
                         NRJ_list.Add(p);
-                        p.Walkable = true;
+                        p.Walkable=true;
                     }
                     // If point point is Ennemy 
                     if (informations[index] == (byte)CaseState.Ennemy)
                     {
                         meX = j;
                         meY = i;
-                        p.Walkable = true;
+                        p.Walkable=true;
                     }
                     if (informations[index] == (byte)CaseState.Wall)
                     {
-                        p.Walkable = false;
+                        p.Walkable=false;
                     }
                     if (informations[index] == (byte)CaseState.Empty)
                     {
-                        p.Walkable = true;
+                        p.Walkable=true;
 
-                    }
+                    } 
                     index++;
                     lineCells.Add(p);
                 }
                 ScanMap.Add(lineCells);
-
-
-
-
-
-                int Zone1[];
-                int Zone2[];
-                int Zone3[];
-                int Zone4[];
-
-                int Y = 0;
-                int X = 0;
-
-                ScanMap = Zone1 & Zone2 & Zone3 & Zone4
-
-                foreach (List<GridPoint> Ligne in ScanMap)
-                {
-                    foreach (GridPoint Point in Ligne)
-                    {
-                        if (Point.Position.X < distance / 2)
-                            if (Point.Position.Y < distance / 2)
-                            { }
-                            // on est dans la zone1
-                            else
-                            { }// on est dans la zone2
-                        if (Point.Position.Y < distance / 2)
-                            {}//on est dans la zone 3
-                        else { }//on est dans la zone4
-                    }
-                }
-                Console.WriteLine(Zone1);
             }
-
+            
             // Find route for each nrgpoint : 
             /*
             List<List<MoveDirection>> routes = new List<List<MoveDirection>>();
